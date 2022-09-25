@@ -1,18 +1,23 @@
 package com.nikhilesh1997sinha.progrocery
 
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.graphics.alpha
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import pl.droidsonroids.gif.GifImageView
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity(), GroceryRVAdapter.GroceryItemClickInterface  {
 
@@ -22,15 +27,23 @@ class MainActivity : AppCompatActivity(), GroceryRVAdapter.GroceryItemClickInter
     lateinit var groceryRVAdapter: GroceryRVAdapter
     lateinit var groceryViewModal: GroceryViewModal
     lateinit var grandTotal: TextView
+    lateinit var doSomethingGif: GifImageView
+    lateinit var shareFAB: FloatingActionButton
+    lateinit var shareObject: List<GroceryItems>
+    var gt by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         grandTotal = findViewById(R.id.idGrandTotal)
+        doSomethingGif = findViewById(R.id.doSomething)
+        var ShareText = "Name : Quantity x Price = Total"
 
         itemsRV = findViewById(R.id.idRVItems)
         addFAB = findViewById(R.id.idFABAdd)
+        shareFAB = findViewById(R.id.idFABShare)
+
         list = ArrayList<GroceryItems>()
         groceryRVAdapter = GroceryRVAdapter(list, this)
         itemsRV.layoutManager = LinearLayoutManager(this)
@@ -40,16 +53,44 @@ class MainActivity : AppCompatActivity(), GroceryRVAdapter.GroceryItemClickInter
         groceryViewModal = ViewModelProvider(this, factory).get(GroceryViewModal::class.java)
         groceryViewModal.getAllGroceryItems().observe(this, Observer {
             groceryRVAdapter.list = it
-            var gt = 0
+            gt = 0
             for(i in it){
+                //var tol =0
+                //tol = i.itemQuantity*i.itemPrice
+                //ShareText = ShareText + "\n${i.itemName} : ${i.itemQuantity} x ${i.itemPrice} = ${tol}"
                 gt +=i.itemPrice * i.itemQuantity
             }
+            shareObject = it
+            //ShareText = ShareText+"\n\nGrand Total : "+gt
             Log.d("Grand total MA", "$gt")
-            grandTotal.text = "Grand total: Rps "+gt
+            grandTotal.text = "   Grand total: Rps "+gt+"    "
+            if(gt == 0){
+                doSomethingGif.visibility = View.VISIBLE
+                shareFAB.visibility = View.INVISIBLE
+            }
+            else{
+                doSomethingGif.visibility = View.INVISIBLE
+                shareFAB.visibility = View.VISIBLE
+            }
             groceryRVAdapter.notifyDataSetChanged()
         })
         addFAB.setOnClickListener {
             openDialog()
+        }
+        shareFAB.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                for(i in shareObject){
+                    var tol =0
+                    tol = i.itemQuantity*i.itemPrice
+                    ShareText = ShareText + "\n${i.itemName} : ${i.itemQuantity} x ${i.itemPrice} = ${tol}"
+                }
+                putExtra(Intent.EXTRA_TEXT, ShareText+"\nGrand Total : $gt\n\nThanks for using Pro Grocery 😊😊")
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         }
     }
 

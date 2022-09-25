@@ -7,15 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/idRVItems"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/idFABShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="90dp"
+        android:backgroundTint="#E7338D"
+        android:src="@drawable/ic_baseline_share_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idRVItems"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/idGrandTotal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
         tools:listitem="@layout/grocery_rv_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,24 +44,48 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="#E7338D"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/doSomething"
+        android:layout_width="268dp"
+        android:layout_height="218dp"
+        android:src="@drawable/add_some"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/idGrandTotal"
         android:layout_width="wrap_content"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
+        android:background="@drawable/grandtotal_background"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
-        android:text="Grand total: Rps 0"
+        android:text="   Grand total: Rps 0    "
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
